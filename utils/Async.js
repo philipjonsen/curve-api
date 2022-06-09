@@ -1,12 +1,13 @@
 /* eslint-disable no-restricted-syntax, no-await-in-loop */
 
-import { flattenArray, getArrayChunks } from 'utils/Array';
+import { flattenArray, getArrayChunks } from "utils/Array";
 
-const sleep = (duration) => new Promise((resolve) => setTimeout(resolve, duration));
+const sleep = (duration) =>
+  new Promise((resolve) => setTimeout(resolve, duration));
 
 const sleepUntil = async (conditionFn, checkInterval = 200) => {
-  if (typeof conditionFn !== 'function') {
-    throw new Error('sleepUntil expects a function as first argument');
+  if (typeof conditionFn !== "function") {
+    throw new Error("sleepUntil expects a function as first argument");
   }
 
   while (!conditionFn()) {
@@ -30,9 +31,8 @@ const sequentialPromiseMap = async (array, asyncFn, chunkSize) => {
   return chunkSize ? flattenArray(results) : results;
 };
 
-const sequentialPromiseFlatMap = async (array, asyncFn, chunkSize) => (
-  flattenArray(await sequentialPromiseMap(array, asyncFn, chunkSize))
-);
+const sequentialPromiseFlatMap = async (array, asyncFn, chunkSize) =>
+  flattenArray(await sequentialPromiseMap(array, asyncFn, chunkSize));
 
 const sequentialPromiseReduce = async (array, asyncFn) => {
   const results = [];
@@ -58,11 +58,10 @@ const runConcurrentlyAtMost = async (asyncFns, atMost) => {
       await sleep(0); // Politely let Promise.race yield to the rest of its code first
     }
 
-    const promise = asyncFn()
-      .then((value) => {
-        values.push(value);
-        runningPromises.delete(promise);
-      });
+    const promise = asyncFn().then((value) => {
+      values.push(value);
+      runningPromises.delete(promise);
+    });
 
     runningPromises.add(promise);
   }

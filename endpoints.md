@@ -1,12 +1,11 @@
 ## Table of Contents
 
-  - [getPools](#getpools)
-  - [getETHprice](#getethprice)
-  - [getFactoryTVL](#getfactorytvl)
-  - [getRegistryAddress](#getfactoryaddress)
-  - [getTVL](#getTVL)
-  - [getWeeklyFees](#getweeklyfees)
-
+- [getPools](#getpools)
+- [getETHprice](#getethprice)
+- [getFactoryTVL](#getfactorytvl)
+- [getRegistryAddress](#getfactoryaddress)
+- [getTVL](#getTVL)
+- [getWeeklyFees](#getweeklyfees)
 
 ## List of Endpoints
 
@@ -29,7 +28,7 @@ GET /api/getPools/<blockchainId>/<registryId>
 
 **View**:
 
-*This is the list of all deployed registries on all chains, as of March 16, 2022*
+_This is the list of all deployed registries on all chains, as of March 16, 2022_
 
 - https://api.curve.fi/api/getPools/ethereum/main
 - https://api.curve.fi/api/getPools/ethereum/crypto
@@ -53,9 +52,11 @@ GET /api/getPools/<blockchainId>/<registryId>
 - https://api.curve.fi/api/getPools/xdai/main
 
 ### getETHprice
+
 ```
 GET /api/getETHprice
 ```
+
 Current Ethereum price used to calculate gas price
 
 **View**:
@@ -63,7 +64,6 @@ Current Ethereum price used to calculate gas price
 
 **Parameters:**
 NONE
-
 
 **Response :**
 
@@ -75,9 +75,11 @@ NONE
 ```
 
 ### getFactoryTVL
+
 ```
 GET /api/getFactoryTVL
 ```
+
 Returns factory TVL excluding LP tokens (which are already counted in the main Curve TVL.
 
 **View**:
@@ -85,7 +87,6 @@ Returns factory TVL excluding LP tokens (which are already counted in the main C
 
 **Parameters:**
 NONE
-
 
 **Response :**
 
@@ -97,9 +98,11 @@ NONE
 ```
 
 ### getRegistryAddress
+
 ```
 GET /api/getRegistryAddress
 ```
+
 Returns registry address which is subject to change.
 
 **View**:
@@ -107,7 +110,6 @@ Returns registry address which is subject to change.
 
 **Parameters:**
 NONE
-
 
 **Response :**
 
@@ -118,11 +120,12 @@ NONE
 }
 ```
 
-
 ### getTVL
+
 ```
 GET /api/getTVL
 ```
+
 Returns Curve TVL
 
 **View**:
@@ -130,7 +133,6 @@ Returns Curve TVL
 
 **Parameters:**
 NONE
-
 
 **Response :**
 
@@ -147,9 +149,11 @@ NONE
 ```
 
 ### getTVLFantom
+
 ```
 GET /api/getTVLFantom
 ```
+
 Returns TVL on Fantom
 
 **View**:
@@ -157,7 +161,6 @@ Returns TVL on Fantom
 
 **Parameters:**
 NONE
-
 
 **Response :**
 
@@ -169,9 +172,11 @@ NONE
 ```
 
 ### getTVLPolygon
+
 ```
 GET /api/getTVLPolygon
 ```
+
 Returns TVL on Polygon
 
 **View**:
@@ -179,7 +184,6 @@ Returns TVL on Polygon
 
 **Parameters:**
 NONE
-
 
 **Response :**
 
@@ -191,9 +195,11 @@ NONE
 ```
 
 ### getWeeklyFees
+
 ```
 GET /api/getWeeklyFees
 ```
+
 Returns weekly fees distributed to veCRV holders.
 
 **View**:
@@ -201,7 +207,6 @@ Returns weekly fees distributed to veCRV holders.
 
 **Parameters:**
 NONE
-
 
 **Response :**
 
@@ -216,18 +221,20 @@ NONE
 ```
 
 ### getApys
+
 ```
 GET /api/getApys
 GET /api/getApys?address=0xADDRESS
 ```
+
 Returns all types of APYs for all Curve pools (base APY from trading fees, CRV APY from CRV distribution, and any additional rewards the pool may have)
 
 **View**:
 [getApys](https://api.curve.fi/api/getApys)
 
 **Parameters:**
-- `address` (optional): address to use to calculate CRV boosts and APYs; if no address is provided, the baseline boost value (`1`) is used
 
+- `address` (optional): address to use to calculate CRV boosts and APYs; if no address is provided, the baseline boost value (`1`) is used
 
 **Response :**
 

@@ -3,11 +3,12 @@
  * `/api/getFactoryV2Pools-ID` to `/api/getFactoryV2Pools/ID` in places where it's consumed
  */
 
-import { fn } from 'utils/api';
-import getFactoryV2PoolsApiFn from './getFactoryV2Pools/index';
+import { fn } from "utils/api";
+import getFactoryV2PoolsApiFn from "./getFactoryV2Pools/index";
 
-export default fn(async () => (
-  getFactoryV2PoolsApiFn.straightCall({ blockchainId: 'moonbeam' })
-), {
-  maxAge: 60,
-});
+export default fn(
+  async () => getFactoryV2PoolsApiFn.straightCall({ blockchainId: "moonbeam" }),
+  {
+    maxAge: 60,
+  }
+);

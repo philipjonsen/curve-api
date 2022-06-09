@@ -1,6 +1,6 @@
 # Changelog
 
-*This API doesn't offer versioning yet, so we'll post a deprecation notice in this changelog ahead of time if any breaking change is planned.*
+_This API doesn't offer versioning yet, so we'll post a deprecation notice in this changelog ahead of time if any breaking change is planned._
 
 ## Oct 29, 2021
 
@@ -9,7 +9,7 @@
 - Factory v2 pool data can now be accessed from `/api/getFactoryV2Pools/[blockchainId]`, where `blockchainId` is any chain id that Curve has a factory on (e.g. `'ethereum'`, `'polygon'`, etc)
 - Improvement: better asset price data and more accurate TVLs for factory v2 pool data
 
-### *Deprecation notice*
+### _Deprecation notice_
 
 - Current endpoints for querying factory v2 pool data will be removed in the future. Please update as follows:
   ```

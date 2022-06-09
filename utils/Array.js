@@ -1,5 +1,5 @@
-const uniqBy = require('lodash.uniqby');
-const BN = require('bignumber.js');
+const uniqBy = require("lodash.uniqby");
+const BN = require("bignumber.js");
 
 const uniq = (array) => Array.from(new Set(array).values());
 
@@ -12,7 +12,7 @@ const getArrayChunks = (array, maxItemsPerChunk) => {
 
   for (let i = 0; array.length > i * maxItemsPerChunk; i += 1) {
     res.push(
-      array.slice(i * maxItemsPerChunk, (i * maxItemsPerChunk) + maxItemsPerChunk)
+      array.slice(i * maxItemsPerChunk, i * maxItemsPerChunk + maxItemsPerChunk)
     );
   }
 
@@ -20,43 +20,33 @@ const getArrayChunks = (array, maxItemsPerChunk) => {
 };
 
 // [['a', '1'], ['b', 2], …] -> { a: 1, b: 2, … }
-const arrayToHashmap = (array) => (
-  Object.assign({}, ...array.map(([key, val]) => ({ [key]: val })))
-);
+const arrayToHashmap = (array) =>
+  Object.assign({}, ...array.map(([key, val]) => ({ [key]: val })));
 
-const sumBy = (arr, fn) => (
-  arr.reduce((total, item) => total + parseFloat(fn(item)), 0)
-);
+const sumBy = (arr, fn) =>
+  arr.reduce((total, item) => total + parseFloat(fn(item)), 0);
 
-const sumByBN = (arr, fn) => (
-  arr.reduce((total, item) => total.plus(fn(item) || 0), BN(0))
-);
+const sumByBN = (arr, fn) =>
+  arr.reduce((total, item) => total.plus(fn(item) || 0), BN(0));
 
-const sumBN = (arr) => (
-  arr.reduce((total, numberBN) => (
-    total.plus(numberBN || 0)
-  ), BN(0))
-);
+const sumBN = (arr) =>
+  arr.reduce((total, numberBN) => total.plus(numberBN || 0), BN(0));
 
-const sum = (arr) => (
-  arr.reduce((total, number) => (
-    total + (number || 0)
-  ), 0)
-);
+const sum = (arr) => arr.reduce((total, number) => total + (number || 0), 0);
 
 // arrayOfIncrements(3) -> [0, 1, 2]
 const arrayOfIncrements = (count) => [...Array(Number(count)).keys()];
 
 class CaseInsensitiveMap extends Map {
   set(key, value) {
-    if (typeof key === 'string') {
+    if (typeof key === "string") {
       key = key.toLowerCase();
     }
     return super.set(key, value);
   }
 
   get(key) {
-    if (typeof key === 'string') {
+    if (typeof key === "string") {
       key = key.toLowerCase();
     }
 
@@ -64,7 +54,7 @@ class CaseInsensitiveMap extends Map {
   }
 
   has(key) {
-    if (typeof key === 'string') {
+    if (typeof key === "string") {
       key = key.toLowerCase();
     }
 

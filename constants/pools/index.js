@@ -1,7 +1,7 @@
-const { flatMap } = require('../../utils/Array');
-const pools = require('./pools.js');
-const REFERENCE_ASSETS = require('../reference-assets.json');
-const validatePoolConfigs = require('./init-validation');
+const { flatMap } = require("../../utils/Array");
+const pools = require("./pools.js");
+const REFERENCE_ASSETS = require("../reference-assets.json");
+const validatePoolConfigs = require("./init-validation");
 
 const defaultPoolTemplate = {
   dataIndex: undefined,
@@ -15,7 +15,7 @@ const defaultPoolTemplate = {
   coingeckoInfo: {
     id: undefined, // Must be defined
     symbol: undefined, // Must be defined
-    referenceAssetId: 'dollar',
+    referenceAssetId: "dollar",
   },
   assets: undefined,
   coins: undefined,
@@ -42,55 +42,62 @@ const defaultPoolTemplate = {
   isOldPool: false,
 };
 
-const poolContractNameResolver = (name) => (
-  name === 'ypool' ? 'iearn' :
-  name === 'susd' ? 'susdv2' :
-  name === 'ironbank' ? 'ib' :
-  name
-);
+const poolContractNameResolver = (name) =>
+  name === "ypool"
+    ? "iearn"
+    : name === "susd"
+    ? "susdv2"
+    : name === "ironbank"
+    ? "ib"
+    : name;
 
 const augmentedPools = pools
   .map((pool) => ({
     ...defaultPoolTemplate,
     ...pool,
     // Default to 1 for pools with gauges
-    gaugeVersion: (pool.gaugeVersion !== null || pool.hasNoGauge) ? pool.gaugeVersion : 1,
-    coingeckoInfo: { // Deep merge
+    gaugeVersion:
+      pool.gaugeVersion !== null || pool.hasNoGauge ? pool.gaugeVersion : 1,
+    coingeckoInfo: {
+      // Deep merge
       ...defaultPoolTemplate.coingeckoInfo,
       ...pool.coingeckoInfo,
     },
-    addresses: { // Deep merge
+    addresses: {
+      // Deep merge
       ...defaultPoolTemplate.addresses,
       ...pool.addresses,
     },
-    lpTokenInfo: { // Extend
+    lpTokenInfo: {
+      // Extend
       ...pool.lpTokenInfo,
       wrappedSymbol: pool.coingeckoInfo ? pool.coingeckoInfo.symbol : pool.id,
-      wrapperSymbol: 'CRV',
+      wrapperSymbol: "CRV",
     },
     poolUrl: `https://curve.fi/${pool.id}/deposit`,
     get containsSynthCoin() {
       return (
-        pool.coins.some(({ isSynth }) => isSynth)
+        pool.coins.some(({ isSynth }) => isSynth) &&
         // Mapping for metapools not available yet in synth swaps, uncomment below + delete last line when it is
         // || !!pool.underlyingCoins?.some(({ isSynth }) => isSynth)
         // || !!pool.metaCoins?.some(({ isSynth }) => isSynth)
-        && !pool.isMetaPool
+        !pool.isMetaPool
       );
     },
     get containsAaveCoin() {
-      return (
-        pool.coins.some(({ wrappedCoinType }) => wrappedCoinType === 'aave')
+      return pool.coins.some(
+        ({ wrappedCoinType }) => wrappedCoinType === "aave"
       );
     },
     get containsCompoundCoin() {
-      return (
-        pool.coins.some(({ wrappedCoinType }) => wrappedCoinType === 'compound')
+      return pool.coins.some(
+        ({ wrappedCoinType }) => wrappedCoinType === "compound"
       );
     },
     get containsYearnBasedCoin() {
-      return (
-        pool.coins.some(({ wrappedCoinType }) => wrappedCoinType && wrappedCoinType.startsWith('iearn'))
+      return pool.coins.some(
+        ({ wrappedCoinType }) =>
+          wrappedCoinType && wrappedCoinType.startsWith("iearn")
       );
     },
     get lpTokenContractKey() {
@@ -102,40 +109,55 @@ const augmentedPools = pools
     get curveSwapContractKey() {
       return `${pool.id}CurveSwap`;
     },
-  })).sort((a, b) => (
-    a.dataIndex < b.dataIndex ? -1 :
-    a.dataIndex > b.dataIndex ? 1 : 0
-  ));
+  }))
+  .sort((a, b) =>
+    a.dataIndex < b.dataIndex ? -1 : a.dataIndex > b.dataIndex ? 1 : 0
+  );
 
 validatePoolConfigs(augmentedPools);
 
 const poolIds = augmentedPools.map(({ id }) => id);
-const poolIdsWithAliases = flatMap(augmentedPools, ({ id, idAlias }) => [id, idAlias]).filter((o) => !!o);
-const poolGauges = augmentedPools.map(({ addresses: { gauge } }) => gauge).filter((gauge) => !!gauge);
+const poolIdsWithAliases = flatMap(augmentedPools, ({ id, idAlias }) => [
+  id,
+  idAlias,
+]).filter((o) => !!o);
+const poolGauges = augmentedPools
+  .map(({ addresses: { gauge } }) => gauge)
+  .filter((gauge) => !!gauge);
 
 const exp = augmentedPools;
 exp.poolIds = poolIds;
 exp.poolIdsWithAliases = poolIdsWithAliases;
 exp.poolGauges = poolGauges;
 
-exp.getById = (id) => (
+exp.getById = (id) =>
   augmentedPools.find((pool) => id === pool.id) ||
-  augmentedPools.find((pool) => id === pool.idAlias) // Check for id aliases if no match for any pool id
-);
+  augmentedPools.find((pool) => id === pool.idAlias); // Check for id aliases if no match for any pool id
 
-exp.findPoolForCoinsIds = (coinIdA, coinIdB) => augmentedPools.find(({ coins, underlyingCoins }) => (
-  (coins.some(({ id }) => id === coinIdA) || (underlyingCoins && underlyingCoins.some(({ id }) => id === coinIdA))) &&
-  (coins.some(({ id }) => id === coinIdB) || (underlyingCoins && underlyingCoins.some(({ id }) => id === coinIdB)))
-));
+exp.findPoolForCoinsIds = (coinIdA, coinIdB) =>
+  augmentedPools.find(
+    ({ coins, underlyingCoins }) =>
+      (coins.some(({ id }) => id === coinIdA) ||
+        (underlyingCoins &&
+          underlyingCoins.some(({ id }) => id === coinIdA))) &&
+      (coins.some(({ id }) => id === coinIdB) ||
+        (underlyingCoins && underlyingCoins.some(({ id }) => id === coinIdB)))
+  );
 
-exp.findSynthPoolWithCoinId = (coinId) => augmentedPools.find((pool) => ((
-  pool.coins.some(({ id }) => id === coinId) ||
-  (pool.underlyingCoins && pool.underlyingCoins.some(({ id }) => id === coinId))
-) && pool.containsSynthCoin));
+exp.findSynthPoolWithCoinId = (coinId) =>
+  augmentedPools.find(
+    (pool) =>
+      (pool.coins.some(({ id }) => id === coinId) ||
+        (pool.underlyingCoins &&
+          pool.underlyingCoins.some(({ id }) => id === coinId))) &&
+      pool.containsSynthCoin
+  );
 
 exp.findPoolForSwapAddress = (swapAddress) => {
   const lcSwapAddress = swapAddress.toLowerCase();
-  return augmentedPools.find(({ addresses }) => addresses.swap.toLowerCase() === lcSwapAddress);
+  return augmentedPools.find(
+    ({ addresses }) => addresses.swap.toLowerCase() === lcSwapAddress
+  );
 };
 
 module.exports = exp;
